@@ -1,6 +1,5 @@
 import Product from '../../../models/Products'
 import initDB from '../../../helpers/initDB'
-
 initDB()
 
 export default async (req,res)=>{

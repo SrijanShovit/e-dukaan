@@ -1,9 +1,14 @@
 import { useRouter } from 'next/router'
+
+
+import { parseCookies } from 'nookies'
 import baseUrl from '../../helpers/baseUrl'
 import {useRef,useEffect} from 'react'
 const Product = ({ product }) => {
     const router = useRouter()
     const modalRef = useRef(null)
+    const cookie = parseCookies()
+    const user = cookie.user ? JSON.parse(JSON.stringify(cookie.user)) :""
     useEffect(()=>{
         M.Modal.init(modalRef.current)
     },[])
@@ -52,9 +57,14 @@ const Product = ({ product }) => {
                 <i className="material-icons right">add</i>
             </button>
             <p className="left-align">{product.description}</p>
+            {
+                user.role == 'admin' && 
+                user.role == 'root' && 
             <button data-target="modal1" className="btn modal-trigger waves-effect waves-light #d32f2f red darken-2">Delete
                 <i className="material-icons right">delete</i>
             </button>
+            }
+            
             {getModal()}
         </div>
     )

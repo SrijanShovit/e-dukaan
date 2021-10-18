@@ -1,15 +1,16 @@
 import Link from 'next/link'
 import {useState} from 'react'
 import baseUrl from '../helpers/baseUrl'
+import cookie from 'js-cookie'
 import { useRouter } from 'next/router'
 const Login = ()=>{
   const [email,setEmail] = useState("")
   const [password,setPassword] = useState("")
   const router  = useRouter()
 
-  const userSignup = async(e)=>{
+  const userLogin = async(e)=>{
     e.preventDefault()
-    const res =   await fetch(`${baseUrl}/api/signup`,{
+    const res =   await fetch(`${baseUrl}/api/login`,{
       method:"POST",
       headers:{
         "Content-Type":"application/json"
@@ -24,14 +25,19 @@ const Login = ()=>{
     if(res2.error){
       M.toast({html: res2.error,classes:"red"})
     }else{
-      M.toast({html: res2.message,classes:"green"})
-      router.push('/login')
+      //saving token in cookie will help in accessing it both client side on server side
+      //saving in localstorage will do only with client side
+      console.log(res2)
+      cookie.set('token',res2.token)
+      cookie.set('user',res2.user)
+      // M.toast({html: res2.message,classes:"green"})
+      router.push('/account')
     }
   }
     return(
       <div className="container card authcard center-align">
         <h3>Login</h3>
-        <form onSubmit={(e)=>userSignup(e)}>
+        <form onSubmit={(e)=>userLogin(e)}>
           <input type="email" placeholder="Email"
           value={email}
           onChange={(e)=>setEmail(e.target.value)}
