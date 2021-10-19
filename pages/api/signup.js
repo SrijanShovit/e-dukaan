@@ -1,5 +1,6 @@
 import initDB from '../../helpers/initDB'
 import User from '../../models/User'
+import Cart from '../../models/Cart'
 import bcrypt from 'bcryptjs'
 
 initDB()
@@ -20,6 +21,8 @@ export default async (req,res) => {
             name,
             email,
             password:hashedPassword}).save()
+            //now saving cart of new user as well(Which will be empty array)
+            await new Cart({user: newUser._id}).save()
         console.log(newUser)
         res.status(201).json({message:"New user successfully created"})
     } catch (error) {
