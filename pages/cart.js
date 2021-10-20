@@ -4,11 +4,15 @@ import cookie from 'js-cookie'
 import {useState} from 'react'
 import {useRouter} from 'next/router'
 import Link from 'next/link'
+
+import StripeCheckout from 'react-stripe-checkout'
 const Cart = ({error,products}) => {
-    const [cartProducts,setCartProducts] = useState(products)
+    
+    
     const {token} = parseCookies()
     const router = useRouter()
-
+    const [cartProducts,setCartProducts] = useState(products)
+    let price = 0;
     if (!token) {
         return(
             <div className='center-align'>
@@ -42,11 +46,14 @@ const Cart = ({error,products}) => {
     }
 
     const CartItems = () => {
+        price = 0
         return(
 
             <>
             {
+                
                 cartProducts.map(item => {
+                    price  = price + item.quantity * item.product.price
                     return(
                         <div style={{display: 'flex',margin: '20px'}}>
                             <img src={item.product.mediaUrl} style={{width:'30%'}}/>
@@ -62,9 +69,31 @@ const Cart = ({error,products}) => {
             </>
         )
     }
+
+    const TotalPrice = () => {
+        return(
+            // display flex is used for row-wise
+            <div className='container' style={{display: 'flex', justifyContent: 'space-between'}}>
+            <h5>Grand Total: ₹{price}</h5>
+            <StripeCheckout
+            name = 'e-dukaan'
+            amount = {price}
+            image= {products[0].product.mediaUrl}
+            currency = 'INR'
+            shippingAddress = {true}
+            billingAddress = {true}
+            zipCode = {true}
+
+            >
+            <button className='btn blue'>Checkout</button>
+            </StripeCheckout>
+            </div>
+        )
+    }
     return (
         <div className="container">
          <CartItems/>
+         <TotalPrice/>
         </div>
     )
 }
