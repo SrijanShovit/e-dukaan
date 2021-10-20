@@ -2,7 +2,8 @@ import {parseCookies} from 'nookies'
 import baseUrl from '../helpers/baseUrl'
 import cookie from 'js-cookie'
 import {useRouter} from 'next/router'
-const Cart = (error) => {
+const Cart = ({error}) => {
+    const {token} = parseCookies()
     const router = useRouter()
 
     if (error){
@@ -32,7 +33,9 @@ export async function getServerSideProps(context){
     })
     const products = await res.json()
     if (products.error){
-        return {props: {error:products.error}}
+        return {
+            props: {error:products.error}
+        }
     }
     console.log(products)
     return {

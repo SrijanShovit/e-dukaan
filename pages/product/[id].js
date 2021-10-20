@@ -1,10 +1,11 @@
 import { useRouter } from 'next/router'
 
-
+import cookie2 from 'js-cookie'
 import { parseCookies } from 'nookies'
 import baseUrl from '../../helpers/baseUrl'
-import {useRef,useEffect} from 'react'
+import {useRef,useEffect,useState} from 'react'
 const Product = ({ product }) => {
+    const [qty,setQty] = useState(1)
     const router = useRouter()
     const modalRef = useRef(null)
     const cookie = parseCookies()
@@ -44,6 +45,28 @@ const Product = ({ product }) => {
         await res.json()
         router.push('/')
     }
+
+    const addToCart = async () => {
+        const res = await fetch(`${baseUrl}/api/cart`,{
+            method: 'PUT',
+            headers:{
+                'Content-Type': 'application/json',
+                'Authorization': cookie.token
+            },
+            body: JSON.stringify({
+                quantity:qty,
+                productId: product._id,
+            })
+        })
+        const res2 = await res.json()
+        if (res2.error){
+            M.toast({html:error,classes:'red'})
+            cookie2.remove('user')
+            cookie2.remove('token')
+            router.push('/login')
+        }
+        M.toast({html: res2.message,classes:'green'})
+    }
     return (
         <div className="container center-align">
             <h3>{product.name}</h3>
@@ -52,10 +75,25 @@ const Product = ({ product }) => {
             <input type="number"
                 style={{ width: '400px', margin: '10px' }}
                 min="1"
+                value = {qty}
+                onChange={(e)=>setQty(Number(e.target.value))}
                 placeholder="Quantity" />
-            <button className="btn waves-effect waves-light #673ab7 deep-purple">Add to Cart
+                {user ?
+                
+            <button className="btn waves-effect waves-light #673ab7 deep-purple"
+            onClick={()=>addToCart()}
+            >Add to Cart
                 <i className="material-icons right">add</i>
             </button>
+             :
+            <button className="btn waves-effect waves-light #673ab7 deep-purple"
+            onClick={()=>router.push('/login')}
+            >Login to add
+                <i className="material-icons right">add</i>
+            </button>
+           
+
+                }
             <p className="left-align">{product.description}</p>
             {
                 user.role == 'admin' && 
