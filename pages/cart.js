@@ -1,20 +1,70 @@
 import {parseCookies} from 'nookies'
 import baseUrl from '../helpers/baseUrl'
 import cookie from 'js-cookie'
+import {useState} from 'react'
 import {useRouter} from 'next/router'
-const Cart = ({error}) => {
+import Link from 'next/link'
+const Cart = ({error,products}) => {
+    const [cartProducts,setCartProducts] = useState(products)
     const {token} = parseCookies()
     const router = useRouter()
 
+    if (!token) {
+        return(
+            <div className='center-align'>
+                <h3>Please Login to view your cart</h3>
+                <Link href="/login"><a><button className='btn #1565c0 blue darken-3'>Login</button></a></Link>
+
+            </div>
+        )
+    }
     if (error){
         M.toast({html:error,classes:'red'})
         cookie.remove('user')
         cookie.remove('token')
         router.push('/login')
     }
+
+    const handleRemove = async (pid) => {
+        const res = await fetch(`${baseUrl}/api/cart`,{
+            method:'DELETE',
+            headers:{
+                'Content-Type': 'application/json',
+                "Authorization": token
+            },
+            body: JSON.stringify({
+                productId:pid
+            })
+        })
+        const res2 = await res.json()
+        setCartProducts(res2)
+
+    }
+
+    const CartItems = () => {
+        return(
+
+            <>
+            {
+                cartProducts.map(item => {
+                    return(
+                        <div style={{display: 'flex',margin: '20px'}}>
+                            <img src={item.product.mediaUrl} style={{width:'30%'}}/>
+                            <div style={{marginLeft:'20px'}}>
+                                <h6>{item.product.name}</h6>
+                                <h6>{item.quantity} x {item.product.price}</h6>
+                                <button className='btn red' onClick={() =>{handleRemove(item.product._id)}}>Remove</button>
+                            </div>
+                        </div>
+                    )
+                })
+            }
+            </>
+        )
+    }
     return (
-        <div>
-            cart
+        <div className="container">
+         <CartItems/>
         </div>
     )
 }
