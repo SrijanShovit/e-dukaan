@@ -70,6 +70,10 @@ const Cart = ({error,products}) => {
         )
     }
 
+    const handleCheckout = (paymentInfo) => {
+        console.log(paymentInfo)
+    }
+
     const TotalPrice = () => {
         return(
             // display flex is used for row-wise
@@ -83,6 +87,8 @@ const Cart = ({error,products}) => {
             shippingAddress = {true}
             billingAddress = {true}
             zipCode = {true}
+            stripeKey='pk_test_51JmiqLSExKa31KSBN5hJH7HonBY0jJgj260w71y8MRVr5lHEUhVDCMLwBbVXSTyLS41BTSYX81MMSHdz0swAmOoW00h47NPH6N'
+            token = {(paymentInfo)=>handleCheckout(paymentInfo)}
 
             >
             <button className='btn blue'>Checkout</button>
