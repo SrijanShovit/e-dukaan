@@ -1,5 +1,6 @@
 import {parseCookies} from 'nookies'
 import baseUrl from '../helpers/baseUrl'
+import UserRoles from '../Components/UserRoles'
 import {useEffect,useRef} from 'react'
 const Account = ({orders}) => {
     const orderCard = useRef(null)
@@ -39,8 +40,8 @@ const Account = ({orders}) => {
     }
     return (
        
-        <div className='container'>
-        <div className='center-align'>
+        <div className='container' >
+        <div className='center-align' style={{'margin-top':'1px','backgroundColor':'#4a148c','color':'white'}}>
             <h4>{user.name}</h4>
             <h4>{user.email}</h4>
         </div>    
@@ -53,6 +54,12 @@ const Account = ({orders}) => {
             </div>
             :
             <OrderHistory/> 
+        }
+        {user.role ==='root' 
+        
+        &&
+        
+        <UserRoles/>
         }
         </div>
     )
