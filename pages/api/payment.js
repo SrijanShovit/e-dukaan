@@ -1,6 +1,7 @@
 import Stripe  from "stripe";
 import {v4 as uuidV4} from "uuid";
 import jwt from 'jsonwebtoken'
+import Order from "../../models/Order"
 
 import Cart from '../../models/Cart'
 const stripe = Stripe(process.env.STRIPE_SECRET)
@@ -44,6 +45,13 @@ export default async (req, res)=>{
             //uuid generates random string
             idempotencyKey :uuidV4()
         })
+
+        await new Order({
+            user:userId,
+            email:paymentInfo.email,
+            total:price,
+            products:cart.products
+        }).save()
 
         //emptying cart on payment
         await Cart.findOneAndUpdate(

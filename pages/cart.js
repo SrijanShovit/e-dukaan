@@ -59,7 +59,7 @@ const Cart = ({error,products}) => {
                             <img src={item.product.mediaUrl} style={{width:'30%'}}/>
                             <div style={{marginLeft:'20px'}}>
                                 <h6>{item.product.name}</h6>
-                                <h6>{item.quantity} x {item.product.price}</h6>
+                                <h6>{item.quantity} x ₹ {item.product.price}</h6>
                                 <button className='btn red' onClick={() =>{handleRemove(item.product._id)}}>Remove</button>
                             </div>
                         </div>
@@ -92,20 +92,25 @@ const Cart = ({error,products}) => {
             // display flex is used for row-wise
             <div className='container' style={{display: 'flex', justifyContent: 'space-between'}}>
             <h5>Grand Total: ₹{price}</h5>
-            <StripeCheckout
-            name = 'e-dukaan'
-            amount = {price*100}
-            image= {products[0].product.mediaUrl}
-            currency = 'INR'
-            shippingAddress = {true}
-            billingAddress = {true}
-            zipCode = {true}
-            stripeKey='pk_test_51JmiqLSExKa31KSBN5hJH7HonBY0jJgj260w71y8MRVr5lHEUhVDCMLwBbVXSTyLS41BTSYX81MMSHdz0swAmOoW00h47NPH6N'
-            token = {(paymentInfo)=>handleCheckout(paymentInfo)}
+            {
+                products.length !== 0 && 
+                <StripeCheckout
+                name = 'e-dukaan'
+                amount = {price*100}
+                image= {products.length > 0 ? products[0].product.mediaUrl : ''}
+                currency = 'INR'
+                shippingAddress = {true}
+                billingAddress = {true}
+                zipCode = {true}
+                stripeKey='pk_test_51JmiqLSExKa31KSBN5hJH7HonBY0jJgj260w71y8MRVr5lHEUhVDCMLwBbVXSTyLS41BTSYX81MMSHdz0swAmOoW00h47NPH6N'
+                token = {(paymentInfo)=>handleCheckout(paymentInfo)}
+    
+                >
+                <button className='btn blue'>Checkout</button>
+                </StripeCheckout>
 
-            >
-            <button className='btn blue'>Checkout</button>
-            </StripeCheckout>
+            }
+           
             </div>
         )
     }

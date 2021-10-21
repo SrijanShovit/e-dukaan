@@ -11,7 +11,7 @@ const Home = ({ products }) => {
         <span className="card-title">{product.name}</span>
       </div>
       <div className="card-content">
-        Rs {product.price}
+      ₹ {product.price}
       </div>
       <div className="card-action">
         <Link href={'/product/[id]'} as={`/product/${product._id}`}><a>View Product Details</a></Link>
