@@ -55,7 +55,7 @@ const Cart = ({error,products}) => {
                 cartProducts.map(item => {
                     price  = price + item.quantity * item.product.price
                     return(
-                        <div style={{display: 'flex',margin: '20px'}}>
+                        <div style={{display: 'flex',margin: '20px'}} key={item._id}>
                             <img src={item.product.mediaUrl} style={{width:'30%'}}/>
                             <div style={{marginLeft:'20px'}}>
                                 <h6>{item.product.name}</h6>
@@ -83,7 +83,8 @@ const Cart = ({error,products}) => {
             })
         })
         const res2 = await res.json()
-        console.log(res2)
+        M.toast({html:res2.message,classes:"green"})
+        router.push('/')
 
     }
 

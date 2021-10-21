@@ -2,6 +2,9 @@ import Stripe  from "stripe";
 import {v4 as uuidV4} from "uuid";
 import jwt from 'jsonwebtoken'
 import Order from "../../models/Order"
+import initDB from '../../helpers/initDB'
+
+initDB()
 
 import Cart from '../../models/Cart'
 const stripe = Stripe(process.env.STRIPE_SECRET)

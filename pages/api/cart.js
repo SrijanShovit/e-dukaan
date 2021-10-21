@@ -1,5 +1,9 @@
 import jwt from 'jsonwebtoken'
 import Cart from '../../models/Cart'
+import Authenticated from '../../helpers/Authenticated'
+import initDB from '../../helpers/initDB'
+
+initDB()
 
 export default async (req, res) => {
     switch (req.method) {
@@ -17,23 +21,6 @@ export default async (req, res) => {
     }
 }
 
-//making middleware using higher order component
-function Authenticated(icomponent){
-    return (req,res) => {
-        const {authorization} = req.headers;
-        if (!authorization){
-            return res.status(401).json({error:"You must be logged in"})
-        }
-        try {
-            const {userId} = jwt.verify(authorization,process.env.JWT_SECRET)
-            req.userId = userId
-            return icomponent(req,res)
-        } catch (error) {
-            return res.status(401).json({error:"You must be logged in"})
-            
-        }
-    }
-}
 
 //wrapping with higher order component
 const fetchUserCart = Authenticated(async (req,res) => {
