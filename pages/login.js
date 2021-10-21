@@ -29,7 +29,7 @@ const Login = ()=>{
       //saving in localstorage will do only with client side
       console.log(res2)
       cookie.set('token',res2.token)
-      cookie.set('user',res2.user)
+      cookie.set('user',JSON.stringify(res2.user))
       // M.toast({html: res2.message,classes:"green"})
       router.push('/account')
     }

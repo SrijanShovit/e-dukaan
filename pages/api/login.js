@@ -20,7 +20,7 @@ export default async (req,res) => {
         return res.status(401).json({error:"Invalid credentials"})
        }
        else{
-        const token = jwt.sign({userId:user._id},process.env.JWT_SECRET,{
+        const token = jwt.sign({userId:user._id},process.env.JWT_SECRET || "updated it after correction",{
             expiresIn:"7d"
         })
         const {name,role,email} = user
