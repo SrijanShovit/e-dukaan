@@ -26,17 +26,7 @@ const Home = ({ products }) => {
   )
 }
 
-export async function getServerSideProps() {
-  const res = await fetch(`${baseUrl}/api/products`)
-  const data = await res.json()
-  return {
-    props: {
-      products: data
-    }
-  }
-
-}
-// export async function getStaticProps() {
+// export async function getServerSideProps() {
 //   const res = await fetch(`${baseUrl}/api/products`)
 //   const data = await res.json()
 //   return {
@@ -46,6 +36,16 @@ export async function getServerSideProps() {
 //   }
 
 // }
+export async function getStaticProps() {
+  const res = await fetch(`${baseUrl}/api/products`)
+  const data = await res.json()
+  return {
+    props: {
+      products: data
+    }
+  }
+
+}
 
 //this function will run only on server side
 //getStaticProps is used for non user specific pgs like landing pg->made ready before request by user
