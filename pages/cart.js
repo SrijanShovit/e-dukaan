@@ -70,8 +70,21 @@ const Cart = ({error,products}) => {
         )
     }
 
-    const handleCheckout = (paymentInfo) => {
+    const handleCheckout = async (paymentInfo) => {
         console.log(paymentInfo)
+        const res = await fetch(`${baseUrl}/api/payment`,{
+            method:'POST',
+            headers:{
+                'Content-Type': 'application/json',
+                "Authorization": token
+            },
+            body: JSON.stringify({
+                paymentInfo
+            })
+        })
+        const res2 = await res.json()
+        console.log(res2)
+
     }
 
     const TotalPrice = () => {
@@ -81,7 +94,7 @@ const Cart = ({error,products}) => {
             <h5>Grand Total: ₹{price}</h5>
             <StripeCheckout
             name = 'e-dukaan'
-            amount = {price}
+            amount = {price*100}
             image= {products[0].product.mediaUrl}
             currency = 'INR'
             shippingAddress = {true}
