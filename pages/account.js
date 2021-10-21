@@ -4,10 +4,10 @@ import {parseCookies} from 'nookies'
 const Account = () => {
     const cookie = parseCookies()
     console.log(cookie)
-    // const user = cookie.user ? JSON.parse(JSON.stringify(cookie.user)) :""
-    // console.log('User:', user)
+    const user = cookie.user ? JSON.parse(cookie.user) :"User not found"
+    console.log('User:', user)
     return (
-        <div>hi ac</div>
+        <div>hi {user.name}</div>
         // <div className='container'>
         // <div className='center-align'>
         //     <h4>{user.name}</h4>
